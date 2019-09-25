@@ -1,0 +1,82 @@
+class ObserverList{
+    constructor(){
+        this.observerList =[]
+    }
+    add(observer){
+        this.observerList.add(observer)
+}
+notify(context){
+    this.observerList.map(observer=>observer.update(context))
+
+}
+}
+
+
+class UrlObserverList extends ObserverList{
+    constructor(props) {
+        super(props);
+
+    }
+    notify(context){
+        const location = window.location
+        context.urlParams  = location.split("/");
+        this.observerList.map(observer=>observer.update(context))
+    }
+
+}
+
+class Observer{
+    constructor(eventObj) {
+        this.events = eventObj.events
+        this.config = eventObj.config
+    }
+    update(context){
+        const commandList = context
+        this.events.map(event=>commandList.push(event))
+    }
+}
+class DefaultObserver extends Observer{}
+
+class UrlObserver extends Observer{
+    constructor(props) {
+        super(props)
+    }
+
+
+    update(context){
+
+        const commandList = context.commandList;
+
+        const urlParams = context.urlParams
+
+
+        const requiredUrlStructur = this.config.urlStructure
+
+        if(findParamInArray(urlParams, requiredUrlStructur)){
+
+            this.events.map(event=>commandList.push(event))
+
+        }
+
+    }
+
+}
+
+const urlObserverList = new UrlObserverList()
+const defaultObserverList =new ObserverList()
+config.forEach(event=>{
+
+    if(event.config.trigger==='url'){
+    const urlObserver = new UrlObserver(event)
+    urlObserverList.add(urlObserver)
+}else if (event.config.trigger==="default"){
+    const defaultObserver = new Observer()
+    defaultObserverList.add(defaultObserver)
+}
+})
+
+urlObserverList.notify({commandList:this.commandList})
+const context = {commandList: this.commandList}
+defaultObserverList.notify(context)
+const  notifyUrlObserverList = urlObserverList.notify(context)
+if(urlChanged) notifyUrlObserverList()
