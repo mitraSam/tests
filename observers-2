@@ -1,0 +1,90 @@
+function urlChange(cb){
+    var onhashchange = window.onhashchange  || function () {
+
+    };
+    window.onhashchange = function () {
+        onhashchange.apply(history, arguments);
+         cb()
+    };
+
+}
+
+const commandList = []
+
+class Observable{
+    constructor(fnThatProdVal){
+    this.fnThatProdVal = fnThatProdValac
+
+    }
+    subscribe(next){
+        this.fnThatProdVal(next)
+    }
+    map(fn){
+        return new Observable((next)=>{
+            this.subscribe(()=>{
+                const res = fn();
+                if(res){
+                    next(res)
+                }
+            })
+        })
+    }
+
+}
+
+
+
+function conditioner(ev) {
+    return function () {
+
+        if(ev.condition()){
+            if(ev.enrich){
+                return ev.enrich()
+            }
+            return ev.events
+        }
+    }
+
+}
+
+const ev = {
+    condition:()=>true,
+    events:[{
+        type:'event1',payload:{heavy:'stuff'}
+    },
+        {
+        type:'event2',payload:{heavy:'stuff2'}
+    },
+    ],
+};
+const ev2 = {
+    condition:()=>true,
+    events:[{
+        type:'event3',payload:{heavy:'stuff3'}
+    },
+        {
+        type:'event4',payload:{heavy:'stuff4'}
+    },
+    ],
+};
+
+const pushEvents  = (events)=>{
+
+
+
+        events.map(event=>commandList.push(event))
+
+}
+function buildEventListener(event,element) {
+    return function (events) {
+        element.addEventListener(event,()=>)
+    }
+    
+
+}
+
+    const observer = new Observable(urlChange);
+observer.map(conditioner(ev)).subscribe(events=>{
+    document.addEventListener("click", ()=>console.log(events))
+})
+
